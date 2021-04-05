@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-
+    
+    
     <!-- ここにページ毎のコンテンツを書く -->
     <h1>タスク新規作成ページ</h1>
 
