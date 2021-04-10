@@ -1,4 +1,4 @@
-{{--
+{{-- lesson13-14で作ったものをいったんコメントアウト
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -107,6 +107,8 @@
     <div class="center jumbotron">
         <div class="text-center">
             <h1>Welcome to the TaskLists</h1>
+             {{-- ユーザ登録ページへのリンク --}}
+            {!! link_to_route('signup.get', 'Sign up now!', [], ['class' => 'btn btn-lg btn-primary']) !!}
         </div>
     </div>
 @endsection
