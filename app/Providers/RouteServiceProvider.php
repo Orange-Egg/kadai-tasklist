@@ -22,8 +22,10 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
      
-    // リダイレクト先をトップページに設定
+    // ユーザ登録直後のリダイレクト先をトップページで設定
     public const HOME = '/';
+    // ユーザ登録直後のリダイレクト先をトップページではなくインデックス画面に設定(まちがい)
+    // public const HOME = 'tasks.index';
 
     /**
      * Define your route model bindings, pattern filters, etc.

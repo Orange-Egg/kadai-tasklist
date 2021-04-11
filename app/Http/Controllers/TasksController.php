@@ -15,13 +15,19 @@ class TasksController extends Controller
      */
     public function index()
     {
-        // タスク一覧を取得
-        $tasks = Task::orderBy('id', 'desc')->paginate(25);
-
-        // タスク一覧ビューでそれを表示
-        return view('tasks.index', [
-            'tasks' => $tasks,
-        ]);
+        // 認証済みorNOTで挙動を変える
+        if (\Auth::check()) { // 認証済みの場合
+            // 認証済みユーザを取得
+            $user = \Auth::user();
+            // タスク一覧を取得
+            $tasks = Task::orderBy('id', 'desc')->paginate(25);
+        
+            // タスク一覧ビューでそれを表示
+            return view('tasks.index', [
+                'tasks' => $tasks,
+            ]);
+            
+        };
     }
 
     /**
@@ -54,13 +60,21 @@ class TasksController extends Controller
         ]);
         
         // タスクを作成
-        $task = new Task;
-        $task->status = $request->status;    // 追加
-        $task->content = $request->content;
-        $task->save();
-
+        // $task = new Task;
+        // $task->status = $request->status;    // 追加
+        // $task->content = $request->content;
+        // $task->save();
+        
+        // 認証済みユーザのタスクとして作成（リクエストされた値をもとに作成）
+        $request->user()->tasks()->create([
+            'status' => $request->status,
+            'content' => $request->content,
+        ]);
+        
         // トップページへリダイレクトさせる
         return redirect('/');
+        // 前のページへリダイレクト
+        // return back();
     }
 
     /**
@@ -132,9 +146,14 @@ class TasksController extends Controller
     public function destroy($id)
     {
         // idの値でタスクを検索して取得
-        $task = Task::findOrFail($id);
+        // $task = Task::findOrFail($id);
         // タスクを削除
-        $task->delete();
+        // $task->delete();
+        
+        // 認証済みユーザがそのタスクの所有者である場合は、投稿を削除
+        if (\Auth::id() === $task->user_id) {
+            $task->delete();
+        }
 
         // トップページへリダイレクトさせる
         return redirect('/');
