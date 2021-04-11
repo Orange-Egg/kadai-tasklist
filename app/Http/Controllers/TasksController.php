@@ -27,6 +27,12 @@ class TasksController extends Controller
                 'tasks' => $tasks,
             ]);
             
+        } else {
+            // top pageへリダイレクトさせる
+            // return back(); ng
+            return view('welcome'); // view(表示)のみ
+            // return redirect('welcome'); ng
+            // return redirect('/'); ng
         };
     }
 
@@ -146,16 +152,18 @@ class TasksController extends Controller
     public function destroy($id)
     {
         // idの値でタスクを検索して取得
-        // $task = Task::findOrFail($id);
+        $task = Task::findOrFail($id); // 有効化
         // タスクを削除
         // $task->delete();
         
         // 認証済みユーザがそのタスクの所有者である場合は、投稿を削除
         if (\Auth::id() === $task->user_id) {
             $task->delete();
+        } else {
+            return redirect('/');
         }
 
-        // トップページへリダイレクトさせる
+        // トップページへリダイレクトさせる ログインユーザの場合、一覧画面へ遷移
         return redirect('/');
     }
 }

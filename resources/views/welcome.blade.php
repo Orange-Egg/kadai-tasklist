@@ -106,8 +106,12 @@
 @section('content')
     {{-- if文で条件分岐 --}}
     @if (Auth::check())
+        {{-- ログインしていたら、ログインユーザーの名前を表示 --}}
         {{ Auth::user()->name }}
+        {{-- ログインしていたら、タスク一覧を表示 --}}
+        return view('/');
     @else
+        {{-- そうでなければログイン前のトップページを表示 --}}
         <div class="center jumbotron">
             <div class="text-center">
                 <h1>Welcome to the TaskLists</h1>

@@ -20,12 +20,15 @@ Route::resource('tasks', 'TasksController');
 
 
 // デフォルトトップページへのルーティング
+/*
 Route::get('/', function () {
     return view('welcome');
 });
+*/
 
 // for Lesson15
-// Route::get('/', 'TasksController@index');
+Route::get('/', 'TasksController@index');
+Route::resource('tasks', 'TasksController');
 
 // ユーザ登録(Auth内のRegisterControllerが担当)
 Route::get('signup', 'Auth\RegisterController@showRegistrationForm')->name('signup.get');
@@ -36,7 +39,7 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login')->name('login.post');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
 
-// 認証付きのルーティング。認証済みのユーザだけが登録・削除のアクションにアクセスできる
+// 認証付きのルーティング。認証済みのユーザだけが一覧・新規作成・登録・削除のアクションにアクセスできる
 Route::group(['middleware' => ['auth']], function () {
-    Route::resource('tasks', 'TasksController', ['only' => ['store', 'destroy']]);
+    Route::resource('tasks', 'TasksController', ['only' => ['index', 'create', 'edit', 'store', 'destroy']]);
 });
