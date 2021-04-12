@@ -115,11 +115,12 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
+        // idの値でタスクを検索して取得
+        $task = Task::findOrFail($id);
+        
         // 認証済みユーザがそのタスクの所有者である場合は、タスクを取得
         if (\Auth::id() === $task->user_id) {
-            // idの値でタスクを検索して取得
-            $task = Task::findOrFail($id);
-
+            
             // タスク編集ビューでそれを表示
             return view('tasks.edit', [
                 'task' => $task,
