@@ -93,11 +93,17 @@ class TasksController extends Controller
     {
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
-
-        // メッセージ詳細ビューでそれを表示
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
+        
+        // 認証済みユーザがそのタスクの所有者である場合は、投稿を表示
+        if (\Auth::id() === $task->user_id) {
+            // タスク詳細ビューでそれを表示
+            return view('tasks.show', [
+                'task' => $task,
+            ]);
+        // 認証できなければ、トップページへ戻る
+        } else {
+            return redirect('/');
+        }
     }
 
     /**
@@ -108,13 +114,19 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        // idの値でタスクを検索して取得
-        $task = Task::findOrFail($id);
+        // 認証済みユーザがそのタスクの所有者である場合は、タスクを取得
+        if (\Auth::id() === $task->user_id) {
+            // idの値でタスクを検索して取得
+            $task = Task::findOrFail($id);
 
-        // タスク編集ビューでそれを表示
-        return view('tasks.edit', [
-            'task' => $task,
-        ]);
+            // タスク編集ビューでそれを表示
+            return view('tasks.edit', [
+                'task' => $task,
+            ]);
+        // 認証できなければ、トップページへ戻る
+        } else {
+            return redirect('/');
+        }
     }
 
     /**
@@ -132,15 +144,21 @@ class TasksController extends Controller
             'content' => 'required|max:255',
         ]);
         
-        // idの値でタスクを検索して取得
-        $task = Task::findOrFail($id);
-        // タスクを更新
-        $task->status = $request->status;    // 追加
-        $task->content = $request->content;
-        $task->save();
+        // 認証済みユーザがそのタスクの所有者である場合は、タスクを取得
+        if (\Auth::id() === $task->user_id) {
+            // idの値でタスクを検索して取得
+            $task = Task::findOrFail($id);
+            // タスクを更新
+            $task->status = $request->status;    // 追加
+            $task->content = $request->content;
+            $task->save();
 
-        // トップページへリダイレクトさせる
-        return redirect('/');
+            // トップページへリダイレクトさせる
+            return redirect('/');
+        } else {
+             // トップページへリダイレクトさせる
+            return redirect('/');
+        }
     }
 
     /**
