@@ -146,10 +146,12 @@ class TasksController extends Controller
             'content' => 'required|max:255',
         ]);
         
+        // idの値でタスクを検索して取得
+        $task = Task::findOrFail($id);
+        
         // 認証済みユーザがそのタスクの所有者である場合は、タスクを取得
         if (\Auth::id() === $task->user_id) {
-            // idの値でタスクを検索して取得
-            $task = Task::findOrFail($id);
+            
             // タスクを更新
             $task->status = $request->status;    // 追加
             $task->content = $request->content;
